@@ -14,7 +14,7 @@ class Color:
         self.rgb = self.r, self.g, self.b
 
     def hex(self):
-        return "#" + "".join(map(lambda x: hex(x)[2:].rjust(2, "0"), self.rgb))
+        return "".join(map(lambda x: hex(x)[2:].rjust(2, "0"), self.rgb))
 
 
 class Pixel:
@@ -34,6 +34,7 @@ class Picture:
     def __init__(self, resolution: tuple[int, int]):
         self.image = Image.new('RGB', resolution, (0, 0, 0))
         self.matrix = self.update_matrix()
+        self.resolution = resolution
 
     def update_image(self):
         self.image = Image.fromarray(self.matrix)
@@ -45,6 +46,10 @@ class Picture:
 
     def save_image(self, dir_path, file_name, ):
         self.image.save(f'{dir_path}/{file_name}.png', "PNG")
+
+    def point(self, pos: Pos, color: Color):
+        if pos.x < self.resolution[0] and pos.y < self.resolution[1]:
+            self.matrix[pos.y, pos.x] = np.array(color.rgb)
 
 
 class Action:
@@ -63,7 +68,7 @@ class Action:
         self.ang = 0
 
         # Возможные стороны для перемещения объекта
-        self.sides = [None] * 8
+        self.sides = [None, None, None, None, None, None, None, None]
         self.set_sides()
 
     def turn_left(self):
@@ -96,8 +101,7 @@ class Action:
         """Перемещение объекта по координатной оси по направлению движения"""
         self.set_sides()
         old_object_pos = self.obj.pos
-        for side in range(len(self.sides)):
-            self.obj.pos = self.sides[side]
+        self.obj.pos = self.sides[self.dir]
         self.steps_counter += 1
         return old_object_pos
 

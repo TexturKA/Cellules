@@ -2,8 +2,8 @@ width: 1366
 height: 768
 full_screen: 0
 time_interval: 0
-image_eval: 0
-image_tail: 2
+enable_darkening: 1
+darkening_degree: 2
 lifetime: 1000
 chance_turn_left: 10
 chance_turn_right: 10

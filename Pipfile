@@ -8,6 +8,7 @@ pillow = "*"
 numpy = "*"
 pyyaml = "*"
 pyqt6 = "*"
+pyside6 = "*"
 
 [dev-packages]
 

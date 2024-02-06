@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 
 from tools import getLogger
 from general import CelluesApplication
@@ -24,4 +24,4 @@ if __name__ == "__main__":
         logger.exception(err)
     else:
         logger.debug("Exit!")
-        sys.exit(app.exec())
+        sys.exit(app.exec_())

@@ -17,7 +17,8 @@ class CelluesApplication:
         self.is_fullscreen = bool(settings.get("full_screen"))
         self.chances = {key: int(value) for key, value in settings.items()
                         if key.startswith("chance")}
-        self.darkening_degree = settings["image_tail"]
+        self.enable_darkening = settings["enable_darkening"]
+        self.darkening_degree = settings["darkening_degree"]
         self.lifetime = settings["lifetime"]
 
         self.picture: Picture = Picture(self.resolution)

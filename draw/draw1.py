@@ -1,6 +1,6 @@
 import numpy as np
 from PIL.ImageDraw import Draw
-from PyQt6.QtCore import QThread
+from PySide6.QtCore import QThread
 
 from general import CelluesApplication
 from models import Picture, Cell, Clan, Pos, Pixel, Action, Color
@@ -31,11 +31,11 @@ def operations(service: CelluesApplication, threads: list):
 
     spawn_point = Pos(
         np.random.randint(
-            service.picture.image.width // 4,
-            service.picture.image.width - (service.picture.image.width // 4)),
+            service.width // 4,
+            service.width - (service.width // 4)),
         np.random.randint(
-            service.picture.image.height // 4,
-            service.picture.image.height - (service.picture.image.height // 4))
+            service.height // 4,
+            service.height - (service.height // 4))
     )
     spawn_clan = Clan('clan.FFFFFF', spawn_point, Color(255, 255, 255))
     spawn_cell = Cell(spawn_point, spawn_clan, {"direction": np.random.randint(0, 8)})
