@@ -8,18 +8,6 @@ from draw.draw2 import operations
 
 threads: list[QtCore.QThread] = []
 
-# не работатет
-# def image_to_canvas(image: Image):
-#     array = numpy.array(image)
-#     width, height = len(array[0]), len(array)
-#
-#     out = numpy.array((width, height))
-#     for y in range(height):
-#         for x in range(width):
-#             out[y][x] = Pixel(Pos(x, y), Color(*array[y][x]))
-#
-#     return out
-
 
 class Trd(QtCore.QThread):
     def __init__(self, parent, func, func_args=None, signal=None, looptime=10):
@@ -48,13 +36,13 @@ class ShowImage(QtWidgets.QMainWindow):
         self.log = base.log
         self.picture: Picture = base.picture
 
-        self.setWindowTitle("BestCeller by TexturKA")
-        self.setGeometry(0, 0, base.width, base.height)
+        self.setWindowTitle("Cellues by TexturKA")
+        self.setGeometry(0, 0, base.picture.width, base.picture.height)
 
         self.label = QtWidgets.QLabel(self)
         self.label.setAlignment(
             QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
-        self.label.setGeometry(0, 0, base.width, base.height)
+        self.label.setGeometry(0, 0, base.picture.width, base.picture.height)
 
         self.info = QtWidgets.QLabel(self)
         self.info.setAlignment(

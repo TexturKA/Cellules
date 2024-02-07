@@ -34,7 +34,19 @@ class Picture:
     def __init__(self, resolution: tuple[int, int]):
         self.image = Image.new('RGB', resolution, (0, 0, 0))
         self.matrix = self.update_matrix()
-        self.resolution = resolution
+        self.__resolution = resolution
+
+    @property
+    def width(self):
+        return self.__resolution[0]
+
+    @property
+    def height(self):
+        return self.__resolution[1]
+
+    @property
+    def resolution(self):
+        return self.__resolution
 
     def update_image(self):
         self.image = Image.fromarray(self.matrix)
@@ -48,7 +60,7 @@ class Picture:
         self.image.save(f'{dir_path}/{file_name}.png', "PNG")
 
     def point(self, pos: Pos, color: Color):
-        if pos.x < self.resolution[0] and pos.y < self.resolution[1]:
+        if pos.x < self.width and pos.y < self.height:
             self.matrix[pos.y, pos.x] = np.array(color.rgb)
 
 

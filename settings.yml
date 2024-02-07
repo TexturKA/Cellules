@@ -1,11 +1,26 @@
-width: 1366
-height: 768
+# --- Параметры окна ---
+width: 1300
+height: 900
 full_screen: 0
-time_interval: 0
-enable_darkening: 1
-darkening_degree: 2
+
+# --- Настройки графики ---
+# Степень затемнения (0 - отключено, 255 - предел)
+darkening_degree: 1
+# Прозрачность хвостов (0 - отключено)
+darkening_tail: 2
+
+# --- Настройки симуляции ---
+# Время жизни клетки
 lifetime: 1000
-chance_turn_left: 10
-chance_turn_right: 10
-chance_turn_course: 10
+# Ограничение числа клеток в клане
+limit_clan_members: 1000
+# Процент выбора клетки повернуть налево
+chance_turn_left: 8
+# Процент выбора клетки повернуть направо
+chance_turn_right: 8
+# Процент выбора клетки повернуть в сторону точки клана
+chance_turn_course: 5
+# Процент деления клетки с мутацией
 chance_divinity: 1
+# Коэффициент деления клеток
+ratio_divinity: 1

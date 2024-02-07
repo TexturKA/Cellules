@@ -1,4 +1,8 @@
+import sys
 from logging import Logger
+
+import numpy as np
+from PySide6.QtWidgets import QApplication
 
 from tools import load_settings
 from models import Picture, Cell, Clan
@@ -10,18 +14,9 @@ class CelluesApplication:
         self.log_warning = logger.warning
         self.log_error = logger.error
 
-        settings: dict = load_settings.run()
-        self.width = int(settings['width'])
-        self.height = int(settings['height'])
-        self.resolution = self.width, self.height
-        self.is_fullscreen = bool(settings.get("full_screen"))
-        self.chances = {key: int(value) for key, value in settings.items()
-                        if key.startswith("chance")}
-        self.enable_darkening = settings["enable_darkening"]
-        self.darkening_degree = settings["darkening_degree"]
-        self.lifetime = settings["lifetime"]
-
-        self.picture: Picture = Picture(self.resolution)
+        self.settings: dict = load_settings.run()
+        self.darkening_degree = self.settings["darkening_degree"]
+        self.picture: Picture = Picture((self.settings['width'], self.settings['height']))
         self.stat: dict = {
             'population': 1,
             'max_population': 1,
@@ -30,29 +25,36 @@ class CelluesApplication:
         }
         self.cells: set[Cell] = set()
 
+    def run(self):
+        self.log(f"App launch with settings: {self.__dict__}")
+        app = QApplication(sys.argv)
+        return app
+
     def collect_info(self):
         self.stat['population'] = len(self.cells)
         if len(self.cells) > self.stat['max_population']:
             self.stat['max_population'] = len(self.cells)
 
         clans = self.get_clans()
-        for title in self.stat:
-            if title.startswith('clan.') and self.stat[title] == 0:
-                del self.stat[title]
         self.stat['clans'] = len(clans)
+        for item in self.stat.copy():
+            if item.startswith('clan.'):
+                del self.stat[item]
+        for clan in clans:
+            self.stat[clan.name] = len(clans[clan])
 
         text = ''
         for item in self.stat:
             if item.startswith('clan.'):
-                color = '#' + item.split('.')[1]
-                text += f'<span style="color: lightgray">clan <span style="color: {color}">{color}</span>:\t{self.stat[item]}</span><br>'
+                color = item.split('.')[1]
+                text += f'<span style="color: lightgray">clan <span style="color: #{color}">#{color}</span>:\t{self.stat[item]}</span><br>'
             else:
                 text += f'<span style="color: lightgray">{item}:\t{self.stat[item]}</span><br>'
-        self.log(f"Collect info: {text}")
+        # self.log(f"Collect info: {text}")
         return text
 
     def collect_image(self):
-        self.log(f"Collect image. Population: {str(len(self.cells))}")
+        # self.log(f"Collect image. Population: {str(len(self.cells))}")
         return self.picture.update_image()
 
     def get_clans(self) -> dict[Clan, list[Cell]]:
