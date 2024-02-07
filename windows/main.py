@@ -57,7 +57,7 @@ class ShowImage(QtWidgets.QMainWindow):
         thread.setPriority(QtCore.QThread.Priority.NormalPriority)
         threads.append(thread)
 
-        thread = Trd(self, base.collect_info, signal=self.infoSignal, looptime=500)
+        thread = Trd(self, base.collect_info, signal=self.infoSignal, looptime=1000)
         thread.setPriority(QtCore.QThread.Priority.HighestPriority)
         threads.append(thread)
 

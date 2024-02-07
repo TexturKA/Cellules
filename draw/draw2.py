@@ -12,11 +12,12 @@ def darkening(color: Color, degree: float) -> Color:
     return Color(*(round(i / degree) for i in color.rgb if i >= 0))
 
 
-def random_color(threshold: int = 200) -> Color:
+def random_color(color_choice, threshold: int = 200) -> Color:
+    base_color = np.random.choice(color_choice)
     return Color(
-        np.random.randint(threshold, 256),
-        np.random.randint(threshold, 256),
-        np.random.randint(0, 256)
+        np.random.randint(threshold if 'r' in base_color else 0, 256),
+        np.random.randint(threshold if 'g' in base_color else 0, 256),
+        np.random.randint(threshold if 'b' in base_color else 0, 256)
     )
 
 
@@ -43,6 +44,8 @@ def operations(service: CelluesApplication, threads: list):
 
     service.picture.point(spawn_cell.pos, spawn_cell.clan.color)
 
+    color_threshold = service.settings["color_threshold"]
+    color_choice = service.settings["color_choice"]
     darkening_degree = service.settings["darkening_degree"]
     chance_turn_left = service.settings["chance_turn_left"]
     chance_turn_right = service.settings["chance_turn_right"] + chance_turn_left
@@ -51,6 +54,7 @@ def operations(service: CelluesApplication, threads: list):
 
     while threads:
         QThread.usleep(1)
+        service.stat["fps"] += 1
         if 0 < darkening_degree < 256:
             service.picture.matrix = np.abs(np.clip(
                 service.picture.matrix, darkening_degree, 255
@@ -76,7 +80,7 @@ def operations(service: CelluesApplication, threads: list):
                 new_cell = Cell(cell.pos, cell.clan, cell.species)
 
                 if np.random.randint(0, 100) < chance_divinity:
-                    color = random_color()
+                    color = random_color(color_choice, threshold=color_threshold)
                     position = Pos(np.random.randint(0, service.picture.width),
                                    np.random.randint(0, service.picture.height))
                     new_clan = Clan(f"clan.{color.hex().upper()}", position, color)

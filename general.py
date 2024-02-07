@@ -18,6 +18,7 @@ class CelluesApplication:
         self.darkening_degree = self.settings["darkening_degree"]
         self.picture: Picture = Picture((self.settings['width'], self.settings['height']))
         self.stat: dict = {
+            'fps': 0,
             'population': 1,
             'max_population': 1,
             'deaths': 0,
@@ -49,8 +50,12 @@ class CelluesApplication:
                 color = item.split('.')[1]
                 text += f'<span style="color: lightgray">clan <span style="color: #{color}">#{color}</span>:\t{self.stat[item]}</span><br>'
             else:
-                text += f'<span style="color: lightgray">{item}:\t{self.stat[item]}</span><br>'
+                line = self.stat[item]
+                if item == "fps":
+                    line = self.stat[item]
+                text += f'<span style="color: lightgray">{item}:\t{line}</span><br>'
         # self.log(f"Collect info: {text}")
+        self.stat["fps"] = 0
         return text
 
     def collect_image(self):
