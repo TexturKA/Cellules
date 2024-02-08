@@ -63,6 +63,11 @@ class Picture:
         if pos.x < self.width and pos.y < self.height:
             self.matrix[pos.y, pos.x] = np.array(color.rgb)
 
+    def check(self, pos: Pos) -> np.ndarray:
+        if pos.x < self.width and pos.y < self.height:
+            return self.matrix[pos.y, pos.x]
+        return np.zeros(shape=(3,), dtype=np.uint8)
+
 
 class Action:
     """Класс движения, отвечает за движения заданного объекта по координатной оси"""
@@ -80,7 +85,7 @@ class Action:
         self.ang = 0
 
         # Возможные стороны для перемещения объекта
-        self.sides = [None, None, None, None, None, None, None, None]
+        self.sides: list[Pos] = []
         self.set_sides()
 
     def turn_left(self):
@@ -109,9 +114,10 @@ class Action:
         else:
             self.turn_left()
 
-    def step(self) -> Pos:
+    def step(self, dont_reset=False) -> Pos:
         """Перемещение объекта по координатной оси по направлению движения"""
-        self.set_sides()
+        if not dont_reset:
+            self.set_sides()
         old_object_pos = self.obj.pos
         self.obj.pos = self.sides[self.dir]
         self.steps_counter += 1

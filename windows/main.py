@@ -4,7 +4,7 @@ from PIL import Image, ImageQt
 
 from models import Picture
 from general import CelluesApplication
-from draw.draw2 import operations
+from draw.draw3 import operations
 
 threads: list[QtCore.QThread] = []
 
@@ -71,13 +71,13 @@ class ShowImage(QtWidgets.QMainWindow):
         self.log("Window initialized")
 
     def show_image(self):
-        self.log("Image label updated")
+        # self.log("Image label updated")
         image_qt = ImageQt.ImageQt(self.picture.image)
         pixmap = QtGui.QPixmap.fromImage(image_qt)
         self.label.setPixmap(pixmap)
 
     def show_info(self, text):
-        self.log("Info label updated")
+        # self.log("Info label updated")
         self.info.setText(text)
 
     def keyPressEvent(self, e):
