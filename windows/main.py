@@ -36,7 +36,7 @@ class ShowImage(QtWidgets.QMainWindow):
         self.log = base.log
         self.picture: Picture = base.picture
 
-        self.setWindowTitle("Cellues by TexturKA")
+        self.setWindowTitle("Cellules by TexturKA")
         self.setGeometry(0, 0, base.picture.width, base.picture.height)
 
         self.label = QtWidgets.QLabel(self)

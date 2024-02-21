@@ -55,7 +55,7 @@ def operations(service: CelluesApplication, threads: list):
     enable_physics = bool(service.settings["enable_physics"])
 
     while threads:
-        QThread.msleep(1)
+        QThread.usleep(1)
         service.stat["fps"] += 1
         if 0 < darkening_degree < 256:
             service.picture.matrix = np.abs(np.clip(
