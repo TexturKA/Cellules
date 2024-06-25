@@ -53,6 +53,7 @@ def operations(service: CelluesApplication, threads: list):
     chance_turn_course = service.settings["chance_turn_course"] + chance_turn_right
     chance_divinity = service.settings["chance_divinity"]
     enable_physics = bool(service.settings["enable_physics"])
+    darkening_clean = bool(service.settings["darkening_clean"])
 
     while threads:
         QThread.usleep(1)
@@ -114,6 +115,10 @@ def operations(service: CelluesApplication, threads: list):
                 service.picture.point(cell.pos, cell.clan.color)
 
             if cell.action.steps_counter > service.settings["lifetime"]:
-                service.picture.point(cell.pos, darkening(cell.clan.color, 2))
+                if darkening_clean:
+                    cell.action.step()
+                    [service.picture.point(pos, Color(0, 0, 0)) for pos in cell.history]
+                else:
+                    service.picture.point(cell.pos, darkening(cell.clan.color, 2))
                 service.cells.remove(cell)
                 service.stat["deaths"] += 1

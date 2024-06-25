@@ -1,3 +1,5 @@
+from typing import Callable
+
 import numpy as np
 from PIL import Image
 
@@ -71,11 +73,12 @@ class Picture:
 
 class Action:
     """Класс движения, отвечает за движения заданного объекта по координатной оси"""
-    def __init__(self, action_object, direction: int):
+    def __init__(self, action_object, direction: int, record_step: Callable = lambda x: None):
         """Возможные стороны перемещения: 0-UL 1-U 2-UR 3-R 4-DR 5-D 6-DL 7-L"""
         # Объект, который будет двигаться
         self.obj = action_object
         self.steps_counter = 0
+        self.record_step = record_step
 
         # Направление движения
         if not 0 <= direction <= 7:
@@ -121,6 +124,7 @@ class Action:
         old_object_pos = self.obj.pos
         self.obj.pos = self.sides[self.dir]
         self.steps_counter += 1
+        self.record_step(old_object_pos)
         return old_object_pos
 
     def set_priority(self, clan_pos):
@@ -185,5 +189,6 @@ class Cell:
     def __init__(self, position: Pos, clan: Clan, species: dict = None):
         self.pos = position
         self.clan = clan
+        self.history = []
         self.species = species or {}
-        self.action = Action(self, species.get("direction") or 0)
+        self.action = Action(self, species.get("direction") or 0, record_step=self.history.append)
